@@ -1,0 +1,93 @@
+<aside class="admin-sidebar fixed inset-y-0 left-0 w-64 bg-gray-800 text-white shadow-lg pt-16 overflow-y-auto">
+    <nav class="px-4 py-4">
+      <!-- Dashboard -->
+      <div class="mb-6">
+        <a href="/admin/dashboard" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/dashboard' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-tachometer-alt w-6"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+  
+      <!-- User Management -->
+      <div class="mb-6">
+        <h3 class="text-xs uppercase tracking-wider text-gray-400 px-2 mb-2">User Management</h3>
+        <a href="/admin/users" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/users' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-users w-6"></i>
+          <span>Users</span>
+        </a>
+        <a href="/admin/professionals" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/professionals' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-user-tie w-6"></i>
+          <span>Professionals</span>
+        </a>
+        <a href="/admin/verification" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/verification' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-check-circle w-6"></i>
+          <span>Verification</span>
+        </a>
+      </div>
+  
+      <!-- Product Management -->
+      <div class="mb-6">
+        <h3 class="text-xs uppercase tracking-wider text-gray-400 px-2 mb-2">Product Management</h3>
+        <a href="/admin/gemstones" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/gemstones' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-gem w-6"></i>
+          <span>Gemstones</span>
+        </a>
+        <a href="/admin/rough-stones" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/rough-stones' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-mountain w-6"></i>
+          <span>Rough Stones</span>
+        </a>
+        <a href="/admin/jewelry" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/jewelry' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-ring w-6"></i>
+          <span>Jewelry</span>
+        </a>
+      </div>
+  
+      <!-- Marketplace -->
+      <div class="mb-6">
+        <h3 class="text-xs uppercase tracking-wider text-gray-400 px-2 mb-2">Marketplace</h3>
+        <a href="/admin/marketplace/listings" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/marketplace/listings' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-store w-6"></i>
+          <span>Listings</span>
+        </a>
+        <a href="/admin/marketplace/orders" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/marketplace/orders' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-shopping-cart w-6"></i>
+          <span>Orders</span>
+        </a>
+      </div>
+  
+      <!-- Certificates -->
+      <div class="mb-6">
+        <h3 class="text-xs uppercase tracking-wider text-gray-400 px-2 mb-2">Certificates</h3>
+        <a href="/admin/certificates" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/certificates' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-certificate w-6"></i>
+          <span>Certificates</span>
+        </a>
+      </div>
+  
+      <!-- Reference Data -->
+      <div class="mb-6">
+        <h3 class="text-xs uppercase tracking-wider text-gray-400 px-2 mb-2">Reference Data</h3>
+        <a href="/admin/reference-data" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/reference-data' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-database w-6"></i>
+          <span>Manage Reference Data</span>
+        </a>
+      </div>
+  
+      <!-- System -->
+      <div class="mb-6">
+        <h3 class="text-xs uppercase tracking-wider text-gray-400 px-2 mb-2">System</h3>
+        <a href="/admin/system/settings" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/system/settings' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-cog w-6"></i>
+          <span>Settings</span>
+        </a>
+        <a href="/admin/system/audit-log" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/system/audit-log' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-history w-6"></i>
+          <span>Audit Log</span>
+        </a>
+        <a href="/admin/system/backup" class="flex items-center py-2 px-2 rounded hover:bg-gray-700 <%= path === '/admin/system/backup' ? 'bg-gray-700' : '' %>">
+          <i class="fas fa-download w-6"></i>
+          <span>Backup</span>
+        </a>
+      </div>
+    </nav>
+  </aside>

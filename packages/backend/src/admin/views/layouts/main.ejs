@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Gemstone System Admin</title>
+  <link rel="stylesheet" href="/admin/css/tailwind.css">
+  <link rel="stylesheet" href="/admin/css/custom.css">
+  <!-- Add Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Admin-specific styles -->
+  <style>
+    .admin-sidebar {
+      height: calc(100vh - 4rem);
+    }
+  </style>
+  <!-- Page-specific styles -->
+  <% if (typeof styles !== 'undefined') { %>
+    <%- styles %>
+  <% } %>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <!-- Header -->
+  <% if (typeof hideHeader === 'undefined' || !hideHeader) { %>
+    <%- include('../partials/header') %>
+  <% } %>
+
+  <!-- Main Content -->
+  <div class="flex min-h-screen">
+    <!-- Sidebar (if not hidden) -->
+    <% if (typeof hideSidebar === 'undefined' || !hideSidebar) { %>
+      <%- include('../partials/sidebar') %>
+    <% } %>
+
+    <!-- Content Area -->
+    <div class="flex-1 <% if (typeof hideSidebar === 'undefined' || !hideSidebar) { %>pl-64<% } %>">
+      <main class="container mx-auto px-4 py-6">
+        <!-- Flash Messages -->
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+            <p><%= error %></p>
+          </div>
+        <% } %>
+        
+        <% if (typeof success !== 'undefined' && success) { %>
+          <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+            <p><%= success %></p>
+          </div>
+        <% } %>
+        
+        <!-- Page Content -->
+        <%- body %>
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <% if (typeof hideFooter === 'undefined' || !hideFooter) { %>
+    <%- include('../partials/footer') %>
+  <% } %>
+
+  <!-- Core JavaScript -->
+  <script src="/admin/js/admin.js"></script>
+  
+  <!-- Additional Scripts -->
+  <% if (typeof scripts !== 'undefined') { %>
+    <%- scripts %>
+  <% } %>
+</body>
+</html>
