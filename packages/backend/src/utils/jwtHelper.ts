@@ -1,13 +1,18 @@
-import jwt from 'jsonwebtoken'
+import jwt, { SignOptions, Secret } from 'jsonwebtoken'
 import { authConfig } from '@/config/auth'
 
 // Type to ensure we have a proper Secret type that jwt can work with
-const getJwtSecret = (): jwt.Secret => {
+const getJwtSecret = (): Secret => {
   const secret = authConfig.jwt.secret
   if (typeof secret !== 'string' || !secret) {
     throw new Error('JWT secret is not properly configured')
   }
   return secret
+}
+
+// Helper function to ensure expiresIn is the correct type
+const getExpiresIn = (value: string | number | undefined): jwt.SignOptions['expiresIn'] => {
+  return value as jwt.SignOptions['expiresIn']
 }
 
 /**
@@ -18,9 +23,10 @@ const getJwtSecret = (): jwt.Secret => {
  */
 export const generateToken = (
   payload: Record<string, any>,
-  expiresIn = authConfig.jwt.accessTokenExpiration
+  expiresIn = getExpiresIn(authConfig.jwt.accessTokenExpiration)
 ): string => {
-  return jwt.sign(payload, getJwtSecret(), { expiresIn })
+  const options: SignOptions = { expiresIn }
+  return jwt.sign(payload, getJwtSecret(), options)
 }
 
 /**
@@ -38,7 +44,8 @@ export const verifyToken = (token: string): any => {
  * @returns Refresh token
  */
 export const generateRefreshToken = (payload: Record<string, any>): string => {
-  return jwt.sign(payload, getJwtSecret(), {
-    expiresIn: authConfig.jwt.refreshTokenExpiration,
-  })
+  const options: SignOptions = { 
+    expiresIn: getExpiresIn(authConfig.jwt.refreshTokenExpiration)
+  }
+  return jwt.sign(payload, getJwtSecret(), options)
 } 

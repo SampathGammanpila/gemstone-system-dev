@@ -4,34 +4,6 @@ import Button from '@/components/common/ui/Button'
 import Card from '@/components/common/ui/Card'
 
 const Home: React.FC = () => {
-  // Sample featured items that would come from the API
-  const featuredItems = [
-    {
-      id: '1',
-      name: 'Blue Sapphire',
-      type: 'gemstone',
-      image: '/assets/images/gemstones/sapphire.jpg',
-      price: 2500,
-      description: 'Natural blue sapphire, 3.2 carats, excellent cut',
-    },
-    {
-      id: '2',
-      name: 'Raw Ruby Crystal',
-      type: 'rough-stone',
-      image: '/assets/images/rough-stones/ruby.jpg',
-      price: 1200,
-      description: 'Natural ruby rough from Burma, 5.7 carats with good clarity',
-    },
-    {
-      id: '3',
-      name: 'Diamond Pendant',
-      type: 'jewelry',
-      image: '/assets/images/jewelry/diamond-pendant.jpg',
-      price: 3800,
-      description: 'White gold pendant with 1.5 carat diamond, VS clarity',
-    },
-  ]
-
   return (
     <div className="space-y-12">
       {/* Hero section */}
@@ -59,16 +31,10 @@ const Home: React.FC = () => {
             </div>
           </div>
           <div className="md:w-1/2">
-            <img
-              src="/assets/images/gemstones/hero-image.jpg" 
-              alt="Assorted gemstones" 
-              className="rounded-lg shadow-xl"
-              onError={(e) => {
-                // Fallback if image doesn't exist
-                const target = e.target as HTMLImageElement;
-                target.src = 'https://via.placeholder.com/600x400?text=Gemstone+System';
-              }}
-            />
+            {/* Placeholder for hero image */}
+            <div className="bg-primary-300 h-64 rounded-lg shadow-xl flex items-center justify-center">
+              <span className="text-primary-800 font-semibold">Gemstone System</span>
+            </div>
           </div>
         </div>
       </section>
@@ -141,61 +107,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured items section */}
-      <section className="bg-secondary-50 py-12 rounded-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-secondary-900 mb-8 text-center">
-            Featured Items
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredItems.map((item) => (
-              <Card 
-                key={item.id}
-                className="overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-48 object-cover"
-                  onError={(e) => {
-                    // Fallback if image doesn't exist
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://via.placeholder.com/400x200?text=${item.name.replace(' ', '+')}`;
-                  }}
-                />
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">
-                    {item.name}
-                  </h3>
-                  <p className="text-secondary-600 mb-3">
-                    {item.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary-600">
-                      ${item.price.toLocaleString()}
-                    </span>
-                    <Link to={`/marketplace/${item.type}/${item.id}`}>
-                      <Button variant="primary" size="sm">
-                        View Details
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="text-center mt-8">
-            <Link to="/marketplace">
-              <Button variant="outline" size="lg">
-                View All Items
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Professional section */}
       <section>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -215,16 +126,10 @@ const Home: React.FC = () => {
               </Link>
             </div>
             <div className="md:w-1/3">
-              <img
-                src="/assets/images/gemstones/cutter.jpg" 
-                alt="Gemstone professional" 
-                className="rounded-lg shadow-md"
-                onError={(e) => {
-                  // Fallback if image doesn't exist
-                  const target = e.target as HTMLImageElement;
-                  target.src = 'https://via.placeholder.com/300x200?text=Gemstone+Professional';
-                }}
-              />
+              {/* Placeholder for professional image */}
+              <div className="bg-primary-200 h-48 rounded-lg shadow-md flex items-center justify-center">
+                <span className="text-primary-700 font-semibold">Professional Services</span>
+              </div>
             </div>
           </div>
         </div>

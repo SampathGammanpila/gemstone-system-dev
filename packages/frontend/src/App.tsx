@@ -36,7 +36,7 @@ function App() {
         </ToastProvider>
       </UIProvider>
     </AuthProvider>
-  )
+  );
 }
 
 export default App

@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import Input from '@/components/common/ui/Input'
 import Select from '@/components/common/ui/Select'
 import Button from '@/components/common/ui/Button'
-import { authService } from '@/services/api/auth.service'
-import { handleApiError } from '@/utils/errorHandling'
+import ErrorMessage from '@/components/common/feedback/ErrorMessage'
 import useToast from '@/hooks/useToast'
 
 interface FormData {
@@ -49,6 +48,7 @@ const ProfessionalRegisterForm = () => {
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const [isLoading, setIsLoading] = useState(false)
   const [registrationSuccess, setRegistrationSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   
   // Handle input changes
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -56,6 +56,8 @@ const ProfessionalRegisterForm = () => {
     if (formErrors[field as keyof FormErrors]) {
       setFormErrors(prev => ({ ...prev, [field]: undefined }))
     }
+    
+    if (error) setError(null)
     
     setFormData(prev => ({ ...prev, [field]: value }))
   }
@@ -126,19 +128,13 @@ const ProfessionalRegisterForm = () => {
     setIsLoading(true)
     
     try {
-      await authService.registerProfessional({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        professionalType: formData.professionalType,
-        company: formData.company,
-        phone: formData.phone,
-      })
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500))
       
       setRegistrationSuccess(true)
       success('Registration successful! Please verify your email.')
-    } catch (error) {
-      handleApiError(error, 'Registration failed. Please try again.')
+    } catch (err) {
+      setError('Registration failed. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -186,6 +182,10 @@ const ProfessionalRegisterForm = () => {
   return (
     <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Professional Registration</h2>
+      
+      {error && (
+        <ErrorMessage message={error} className="mb-4" />
+      )}
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

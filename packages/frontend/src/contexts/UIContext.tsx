@@ -1,5 +1,4 @@
-import { createContext, useReducer, ReactNode } from 'react'
-import { storageService } from '../services/storage/localStorage.service'
+import { createContext, useReducer, ReactNode, useEffect } from 'react'
 
 // Types
 interface UIState {
@@ -24,7 +23,9 @@ interface UIContextType extends UIState {
 
 // Check for saved theme in localStorage, otherwise use system preference
 const getSavedTheme = (): 'light' | 'dark' => {
-  const savedTheme = storageService.getItem('theme')
+  if (typeof window === 'undefined') return 'light'
+  
+  const savedTheme = localStorage.getItem('theme')
   if (savedTheme === 'light' || savedTheme === 'dark') {
     return savedTheme
   }
@@ -39,9 +40,9 @@ const getSavedTheme = (): 'light' | 'dark' => {
 
 // Initial state
 const initialState: UIState = {
-  sidebarOpen: window.innerWidth >= 1024, // Open by default on larger screens
+  sidebarOpen: typeof window !== 'undefined' ? window.innerWidth >= 1024 : false, // Open by default on larger screens
   theme: getSavedTheme(),
-  isMobileView: window.innerWidth < 768,
+  isMobileView: typeof window !== 'undefined' ? window.innerWidth < 768 : false,
 }
 
 // Reducer
@@ -59,7 +60,9 @@ const uiReducer = (state: UIState, action: UIAction): UIState => {
       }
     case 'SET_THEME':
       // Save theme preference to localStorage
-      storageService.setItem('theme', action.payload)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('theme', action.payload)
+      }
       return {
         ...state,
         theme: action.payload,
@@ -67,7 +70,9 @@ const uiReducer = (state: UIState, action: UIAction): UIState => {
     case 'TOGGLE_THEME':
       const newTheme = state.theme === 'light' ? 'dark' : 'light'
       // Save theme preference to localStorage
-      storageService.setItem('theme', newTheme)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('theme', newTheme)
+      }
       return {
         ...state,
         theme: newTheme,
@@ -98,25 +103,31 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(uiReducer, initialState)
 
   // Add resize event listener to update mobile view state
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', () => {
+  useEffect(() => {
+    const handleResize = () => {
       dispatch({ type: 'SET_MOBILE_VIEW', payload: window.innerWidth < 768 })
       
       // Auto-open sidebar on larger screens when resizing from small to large
       if (window.innerWidth >= 1024 && !state.sidebarOpen) {
         dispatch({ type: 'SET_SIDEBAR', payload: true })
       }
-    })
-  }
+    }
+    
+    window.addEventListener('resize', handleResize)
+    
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [state.sidebarOpen])
 
   // Apply the current theme to the document
-  if (typeof document !== 'undefined') {
+  useEffect(() => {
     if (state.theme === 'dark') {
       document.documentElement.classList.add('dark')
     } else {
       document.documentElement.classList.remove('dark')
     }
-  }
+  }, [state.theme])
 
   // Functions
   const toggleSidebar = () => {

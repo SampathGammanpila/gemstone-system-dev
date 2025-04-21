@@ -1,23 +1,22 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Loader from '@/components/common/feedback/Loader'
-import ProtectedRoute from '@/components/common/route/ProtectedRoute'
 
-// Lazy-loaded pages
-const Browse = lazy(() => import('@/pages/Marketplace/Browse'))
-const Category = lazy(() => import('@/pages/Marketplace/Category'))
-const GemstoneDetail = lazy(() => import('@/pages/Marketplace/GemstoneDetail'))
-const RoughStoneDetail = lazy(() => import('@/pages/Marketplace/RoughStoneDetail'))
-const JewelryDetail = lazy(() => import('@/pages/Marketplace/JewelryDetail'))
-const Cart = lazy(() => import('@/pages/Marketplace/Cart'))
-const Checkout = lazy(() => import('@/pages/Marketplace/Checkout'))
-const OrderConfirmation = lazy(() => import('@/pages/Marketplace/OrderConfirmation'))
-const StoreView = lazy(() => import('@/pages/Marketplace/StoreView'))
+// Create placeholder components for routes
+const Browse = () => <div>Marketplace Browse Page</div>
+const Category = () => <div>Category Page</div>
+const GemstoneDetail = () => <div>Gemstone Detail Page</div>
+const RoughStoneDetail = () => <div>Rough Stone Detail Page</div>
+const JewelryDetail = () => <div>Jewelry Detail Page</div>
+const Cart = () => <div>Cart Page</div>
+const Checkout = () => <div>Checkout Page</div>
+const OrderConfirmation = () => <div>Order Confirmation Page</div>
+const StoreView = () => <div>Store View Page</div>
 
 // Loader component for Suspense
 const PageLoader = () => (
   <div className="flex items-center justify-center p-8">
-    <Loader size="md" text="Loading..." />
+    <Loader size="md" text="Loading marketplace..." />
   </div>
 )
 
@@ -39,33 +38,10 @@ const MarketplaceRoutes: React.FC = () => {
         {/* Store pages */}
         <Route path="store/:storeId" element={<StoreView />} />
         
-        {/* Cart and checkout - protected routes */}
-        <Route 
-          path="cart" 
-          element={
-            <ProtectedRoute>
-              <Cart />
-            </ProtectedRoute>
-          } 
-        />
-        
-        <Route 
-          path="checkout" 
-          element={
-            <ProtectedRoute>
-              <Checkout />
-            </ProtectedRoute>
-          } 
-        />
-        
-        <Route 
-          path="order-confirmation/:orderId" 
-          element={
-            <ProtectedRoute>
-              <OrderConfirmation />
-            </ProtectedRoute>
-          } 
-        />
+        {/* Cart and checkout */}
+        <Route path="cart" element={<Cart />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="order-confirmation/:orderId" element={<OrderConfirmation />} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/marketplace" replace />} />

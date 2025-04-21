@@ -1,7 +1,5 @@
 import { createContext, useReducer, ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { authService } from '../services/api/auth.service'
-import { storageService } from '../services/storage/localStorage.service'
 
 // Types
 interface User {
@@ -133,6 +131,47 @@ const AuthContext = createContext<AuthContextType>({
   updateUser: () => {},
 })
 
+// Mock auth service for initial implementation
+// In a real app, this would call actual API endpoints
+const mockAuthService = {
+  login: async (email: string, password: string): Promise<{ token: string; user: User }> => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    // Mock validation
+    if (email === 'user@example.com' && password === 'password') {
+      return {
+        token: 'mock-token',
+        user: {
+          id: '1',
+          email: 'user@example.com',
+          name: 'Test User',
+          role: 'user',
+          isVerified: true,
+        },
+      }
+    }
+    
+    throw new Error('Invalid email or password')
+  },
+  
+  register: async (userData: { name: string; email: string; password: string }): Promise<{ token: string; user: User }> => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    return {
+      token: 'mock-token',
+      user: {
+        id: '2',
+        email: userData.email,
+        name: userData.name,
+        role: 'user',
+        isVerified: false,
+      },
+    }
+  },
+}
+
 // Provider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState)
@@ -140,8 +179,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Check if user is already logged in from localStorage
-    const token = storageService.getItem('token')
-    const storedUser = storageService.getItem('user')
+    const token = localStorage.getItem('token')
+    const storedUser = localStorage.getItem('user')
 
     if (token && storedUser) {
       try {
@@ -149,8 +188,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         dispatch({ type: 'RESTORE_SESSION', payload: user })
       } catch (error) {
         // Invalid stored user
-        storageService.removeItem('token')
-        storageService.removeItem('user')
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
       }
     }
   }, [])
@@ -159,12 +198,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string) => {
     dispatch({ type: 'LOGIN_START' })
     try {
-      const { data } = await authService.login(email, password)
-      const { token, user } = data
+      const { token, user } = await mockAuthService.login(email, password)
 
       // Store token and user in localStorage
-      storageService.setItem('token', token)
-      storageService.setItem('user', JSON.stringify(user))
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
 
       dispatch({ type: 'LOGIN_SUCCESS', payload: user })
       navigate('/dashboard')
@@ -179,8 +217,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Logout function
   const logout = () => {
-    storageService.removeItem('token')
-    storageService.removeItem('user')
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
     dispatch({ type: 'LOGOUT' })
     navigate('/login')
   }
@@ -189,12 +227,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (userData: { name: string; email: string; password: string }) => {
     dispatch({ type: 'REGISTER_START' })
     try {
-      const { data } = await authService.register(userData)
-      const { token, user } = data
+      const { token, user } = await mockAuthService.register(userData)
 
       // Store token and user in localStorage
-      storageService.setItem('token', token)
-      storageService.setItem('user', JSON.stringify(user))
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
 
       dispatch({ type: 'REGISTER_SUCCESS', payload: user })
       navigate('/dashboard')
@@ -216,7 +253,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const updateUser = (userData: Partial<User>) => {
     if (state.user) {
       const updatedUser = { ...state.user, ...userData } as User
-      storageService.setItem('user', JSON.stringify(updatedUser))
+      localStorage.setItem('user', JSON.stringify(updatedUser))
       dispatch({ type: 'UPDATE_USER', payload: updatedUser })
     }
   }

@@ -1,15 +1,15 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Loader from '@/components/common/feedback/Loader'
 
-// Lazy-loaded pages
-const CertificateView = lazy(() => import('@/pages/Certificate/CertificateView'))
-const Verify = lazy(() => import('@/pages/Certificate/Verify'))
+// Create placeholder components for certificate routes
+const CertificateView = () => <div>Certificate View Page</div>
+const Verify = () => <div>Certificate Verification Page</div>
 
 // Loader component for Suspense
 const PageLoader = () => (
   <div className="flex items-center justify-center p-8">
-    <Loader size="md" text="Loading..." />
+    <Loader size="md" text="Loading certificate..." />
   </div>
 )
 

@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import UIContext from '@/contexts/UIContext'
+import UIContext from '../contexts/UIContext'
 
 // Custom hook to use the UI context
 const useUI = () => {

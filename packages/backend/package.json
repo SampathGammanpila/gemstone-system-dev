@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc && npm run build:css",
-        "build:css": "postcss src/admin/assets/css/tailwind.css -o public/admin/css/tailwind.css --env production",
+        "build:css": "tailwindcss -i ./src/styles/input.css -o ./public/styles/output.css --watch",
         "dev:css": "postcss src/admin/assets/css/tailwind.css -o public/admin/css/tailwind.css --watch",
         "start": "node dist/index.js",
         "dev": "concurrently \"nodemon --exec ts-node -r ./tsconfig-paths-bootstrap.js src/index.ts\" \"npm run dev:css\"",
@@ -20,6 +20,9 @@
         "postgres"
     ],
     "dependencies": {
+        "@types/express-ejs-layouts": "^2.5.4",
+        "@types/handlebars": "^4.0.40",
+        "@types/nodemailer": "^6.4.17",
         "bcryptjs": "^2.4.3",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.6",
@@ -27,19 +30,22 @@
         "dotenv": "^16.3.1",
         "ejs": "^3.1.9",
         "express": "^4.18.2",
+        "express-ejs-layouts": "^2.5.1",
         "express-rate-limit": "^7.1.1",
         "express-validator": "^7.0.1",
+        "handlebars": "^4.7.8",
         "helmet": "^7.0.0",
         "joi": "^17.13.3",
         "jsonwebtoken": "^9.0.2",
         "morgan": "^1.10.0",
         "multer": "^1.4.5-lts.1",
+        "nodemailer": "^6.10.1",
         "pg": "^8.11.3",
         "uuid": "^9.0.1",
         "winston": "^3.11.0"
     },
     "devDependencies": {
-        "@tailwindcss/postcss7-compat": "^2.2.17",
+        "@tailwindcss/postcss": "^4.1.4",
         "@types/bcryptjs": "^2.4.5",
         "@types/compression": "^1.7.3",
         "@types/cookie-parser": "^1.4.4",

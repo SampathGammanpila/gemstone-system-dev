@@ -21,7 +21,7 @@ export const getUsers = async (
       SELECT id, name, email, role, is_verified, created_at, last_login
       FROM users
     `
-    const params = []
+    const params: (string | number)[] = []
 
     // Add role filter if provided
     if (role) {
@@ -89,9 +89,9 @@ export const updateUser = async (
 ) => {
   try {
     // Construct update query based on provided fields
-    const fields = []
-    const values = []
-    const parameters = []
+    const fields: string[] = []
+    const values: string[] = []
+    const parameters: (string | Date)[] = []
 
     if (userData.name) {
       fields.push('name')
@@ -175,7 +175,7 @@ export const getUserProfile = async (userId: string) => {
       [userId]
     )
 
-    const professional = professionalResult.rowCount > 0
+    const professional = professionalResult.rowCount && professionalResult.rowCount > 0
       ? professionalResult.rows[0]
       : null
 

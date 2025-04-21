@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
-import ToastContext, { ToastType } from '@/contexts/ToastContext'
-import { toastService } from '@/services/notifications/toast.service'
+import ToastContext, { ToastType } from '../contexts/ToastContext'
+import { toastService } from '../services/notifications/toast.service'
 
 // Custom hook to use the toast context
 const useToast = () => {

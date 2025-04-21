@@ -25,7 +25,12 @@ export const loginPage = async (req: Request, res: Response) => {
   res.render('auth/login', {
     title: 'Admin Login',
     error: req.query.error || null,
-    success: req.query.success || null
+    success: req.query.success || null,
+    hideHeader: true,
+    hideSidebar: true,
+    hideFooter: true,
+    layout: 'layouts/main',
+    path: req.path
   })
 }
 

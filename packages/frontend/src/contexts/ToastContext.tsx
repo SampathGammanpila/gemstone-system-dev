@@ -1,4 +1,4 @@
-import { createContext, useReducer, ReactNode, useState, useEffect } from 'react'
+import React, { createContext, useReducer, ReactNode, useState, useEffect } from 'react'
 
 // Types
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
@@ -116,45 +116,66 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     setToastTimeouts({})
   }
 
-  // Toast component to render the actual notifications
+  // Toast component to render individual toast
+  const Toast = ({ toast }: { toast: Toast }) => {
+    const [isExiting, setIsExiting] = useState(false)
+    
+    const handleClose = () => {
+      setIsExiting(true)
+      setTimeout(() => {
+        removeToast(toast.id)
+      }, 300)
+    }
+    
+    // Determine styles based on toast type
+    const typeStyles = {
+      success: 'bg-success-100 text-success-800 border-l-4 border-success-500',
+      error: 'bg-danger-100 text-danger-800 border-l-4 border-danger-500',
+      warning: 'bg-warning-100 text-warning-800 border-l-4 border-warning-500',
+      info: 'bg-primary-100 text-primary-800 border-l-4 border-primary-500',
+    }
+    
+    return (
+      <div
+        className={`
+          rounded-md p-4 shadow-lg flex justify-between items-center
+          transform transition-all duration-300
+          ${typeStyles[toast.type]}
+          ${isExiting ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}
+        `}
+        role="alert"
+      >
+        <p className="text-sm font-medium">{toast.message}</p>
+        <button
+          onClick={handleClose}
+          className="ml-4 text-secondary-500 hover:text-secondary-700"
+          aria-label="Close"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+
+  // Toast container to render all toasts
   const ToastContainer = () => {
     if (state.toasts.length === 0) return null
 
     return (
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-md">
         {state.toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`rounded-md p-4 flex justify-between items-center shadow-lg transition-all duration-300 ease-in-out ${
-              toast.type === 'success'
-                ? 'bg-success-100 text-success-800 border-l-4 border-success-500'
-                : toast.type === 'error'
-                ? 'bg-danger-100 text-danger-800 border-l-4 border-danger-500'
-                : toast.type === 'warning'
-                ? 'bg-warning-100 text-warning-800 border-l-4 border-warning-500'
-                : 'bg-primary-100 text-primary-800 border-l-4 border-primary-500'
-            }`}
-          >
-            <p className="text-sm font-medium">{toast.message}</p>
-            <button
-              onClick={() => removeToast(toast.id)}
-              className="ml-4 text-secondary-500 hover:text-secondary-700"
-              aria-label="Close"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
+          <Toast key={toast.id} toast={toast} />
         ))}
       </div>
     )

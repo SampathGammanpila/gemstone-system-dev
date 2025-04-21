@@ -1,20 +1,9 @@
 import React, { useEffect } from 'react'
-import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom'
-import Input from '@/components/common/ui/Input'
-import Button from '@/components/common/ui/Button'
-import Card from '@/components/common/ui/Card'
-import ErrorMessage from '@/components/common/feedback/ErrorMessage'
+import { Link, Navigate } from 'react-router-dom'
 import useAuth from '@/hooks/useAuth'
-import useForm from '@/hooks/useForm'
 import LoginForm from '@/components/auth/LoginForm'
 
-interface LoginFormValues {
-  email: string
-  password: string
-  rememberMe: boolean
-}
-
-const Login = () => {
+const Login: React.FC = () => {
   const { isAuthenticated } = useAuth()
   
   useEffect(() => {

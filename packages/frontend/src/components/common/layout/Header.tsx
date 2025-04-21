@@ -78,7 +78,7 @@ const Header: React.FC = () => {
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-danger-500"></span>
             </button>
 
-            {/* User dropdown */}
+            {/* User dropdown - Fix: Add proper null check for user */}
             <div className="relative">
               <button
                 type="button"
@@ -86,10 +86,10 @@ const Header: React.FC = () => {
                 aria-label="User menu"
               >
                 <div className="h-8 w-8 rounded-full bg-primary-200 flex items-center justify-center text-primary-700 font-semibold">
-                  {user?.name.substring(0, 1).toUpperCase()}
+                  {user && user.name ? user.name.substring(0, 1).toUpperCase() : 'U'}
                 </div>
                 {!isMobileView && (
-                  <span className="font-medium">{user?.name}</span>
+                  <span className="font-medium">{user?.name || 'User'}</span>
                 )}
               </button>
               {/* Dropdown menu would go here */}

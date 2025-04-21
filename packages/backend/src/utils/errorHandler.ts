@@ -23,7 +23,8 @@ export const handleError = (
   if (err instanceof ApiError) {
     statusCode = err.statusCode
     message = err.message
-    errors = err.errors || []
+    // ApiError doesn't have an errors property, so we'll use an empty array
+    errors = []
   } else {
     // For regular errors, we don't expose details in production
     message = process.env.NODE_ENV === 'production' 
@@ -65,29 +66,33 @@ export const asyncErrorHandler = (fn: Function) => {
 export const handleDatabaseError = (error: any): ApiError => {
   // PostgreSQL unique violation
   if (error.code === '23505') {
-    return new ApiError(409, 'Duplicate entry', [
+    return new ApiError(
+      409, 
       error.detail || 'A record with this value already exists'
-    ])
+    )
   }
   
   // PostgreSQL foreign key violation
   if (error.code === '23503') {
-    return new ApiError(400, 'Foreign key violation', [
+    return new ApiError(
+      400, 
       error.detail || 'Referenced record does not exist'
-    ])
+    )
   }
   
   // PostgreSQL not null violation
   if (error.code === '23502') {
-    return new ApiError(400, 'Not null violation', [
+    return new ApiError(
+      400, 
       error.detail || 'A required field is missing'
-    ])
+    )
   }
   
   // Default database error
-  return new ApiError(500, 'Database error', [
+  return new ApiError(
+    500, 
     process.env.NODE_ENV === 'production' 
       ? 'An unexpected database error occurred' 
       : error.message
-  ])
+  )
 }

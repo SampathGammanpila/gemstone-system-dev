@@ -1,8 +1,9 @@
 import { useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '@/hooks/useAuth'
+import useAuth from '@/hooks/useAuth'
 import Button from '@/components/common/ui/Button'
 import Input from '@/components/common/ui/Input'
+import ErrorMessage from '@/components/common/feedback/ErrorMessage'
 
 const LoginForm = () => {
   const { login, isLoading, error, clearError } = useAuth()
@@ -57,9 +58,7 @@ const LoginForm = () => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Log In</h2>
       
       {error && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          {error}
-        </div>
+        <ErrorMessage message={error} className="mb-4" />
       )}
       
       <form onSubmit={handleSubmit}>

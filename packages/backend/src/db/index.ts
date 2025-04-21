@@ -1,4 +1,4 @@
-import { Pool, PoolClient } from 'pg'
+import { Pool, PoolClient, QueryConfig, QueryResult, QueryResultRow } from 'pg'
 import logger from '../utils/logger'
 
 // Database configuration from environment variables
@@ -50,19 +50,29 @@ export const connectDatabase = async (): Promise<void> => {
 
 /**
  * Execute a query against the database
- * @param text SQL query text
- * @param params Query parameters
+ * @param queryConfig SQL query text or configuration object
+ * @param values Query parameters (optional)
  * @returns Query result
  */
-export const query = async (text: string, params?: any[]) => {
+export const query = async <T extends QueryResultRow = QueryResultRow>(
+  queryConfig: string | QueryConfig,
+  values?: any[]
+): Promise<QueryResult<T>> => {
   const start = Date.now()
   try {
-    const res = await pool.query(text, params)
+    const res = await pool.query<T>(queryConfig, values)
     const duration = Date.now() - start
-    logger.debug('Executed query', { text, duration, rows: res.rowCount })
+    logger.debug('Executed query', { 
+      text: typeof queryConfig === 'string' ? queryConfig : queryConfig.text, 
+      duration, 
+      rows: res.rowCount 
+    })
     return res
   } catch (error) {
-    logger.error('Error executing query', { text, error })
+    logger.error('Error executing query', { 
+      text: typeof queryConfig === 'string' ? queryConfig : queryConfig.text, 
+      error 
+    })
     throw error
   }
 }
@@ -73,22 +83,35 @@ export const query = async (text: string, params?: any[]) => {
  */
 export const getClient = async () => {
   const client = await pool.connect()
-  const query = client.query.bind(client)
+  const originalQuery = client.query.bind(client)
   const release = client.release.bind(client)
 
   // Monkey patch the query method to keep track of the last query executed
-  client.query = async (text: string, params?: any[]) => {
+  const patchedQuery = async <T extends QueryResultRow = QueryResultRow>(
+    queryConfig: string | QueryConfig,
+    values?: any[]
+  ): Promise<QueryResult<T>> => {
     const start = Date.now()
     try {
-      const res = await query(text, params)
+      const res = await originalQuery<T>(queryConfig, values)
       const duration = Date.now() - start
-      logger.debug('Executed query with client', { text, duration, rows: res.rowCount })
+      logger.debug('Executed query with client', { 
+        text: typeof queryConfig === 'string' ? queryConfig : queryConfig.text, 
+        duration, 
+        rows: res.rowCount 
+      })
       return res
     } catch (error) {
-      logger.error('Error executing query with client', { text, error })
+      logger.error('Error executing query with client', { 
+        text: typeof queryConfig === 'string' ? queryConfig : queryConfig.text, 
+        error 
+      })
       throw error
     }
   }
+
+  // Assign the patched query method to the client
+  client.query = patchedQuery as typeof client.query
 
   // Monkey patch the release method to log client release
   client.release = () => {

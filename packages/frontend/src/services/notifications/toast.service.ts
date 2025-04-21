@@ -1,4 +1,4 @@
-import { ToastType } from '@/contexts/ToastContext'
+import { ToastType } from '../../contexts/ToastContext'
 
 // This is a wrapper service for the toast context
 // It provides a stable API that can be used anywhere in the app

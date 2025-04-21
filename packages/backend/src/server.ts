@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import { rateLimit } from 'express-rate-limit'
+import expressLayouts from 'express-ejs-layouts'
 
 // Import routes
 import apiRoutes from './api/routes'
@@ -58,6 +59,12 @@ export const createServer = (): Express => {
   // Set up view engine for admin panel
   app.set('views', path.join(__dirname, 'admin/views'))
   app.set('view engine', 'ejs')
+  
+  // Set up express-ejs-layouts
+  app.use(expressLayouts)
+  app.set('layout', 'layouts/main')
+  app.set('layout extractScripts', true)
+  app.set('layout extractStyles', true)
   
   // API routes
   app.use(`${process.env.API_PREFIX || '/api'}`, apiRoutes)
